@@ -1,0 +1,10 @@
+[config]
+width=500
+height=400
+show=drun
+allow_images=true
+prompt=Search
+hide_scroll=true
+insensitive=true
+no_actions=true
+term=ghostty

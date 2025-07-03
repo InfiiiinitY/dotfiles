@@ -1,0 +1,112 @@
+// -*- mode: jsonc -*-
+{
+  "layer": "top", // Waybar at top layer
+  // "position": "bottom", // Waybar position (top|bottom|left|right)
+  "height": 0, // Waybar height (to be removed for auto height)
+  // "width": 1280, // Waybar width
+  "spacing": 0, // Gaps between modules (4px)
+  "reload_style_on_change": true,
+  "margin-top": 8,
+  "margin-right": 8,
+  "margin-bottom": 0,
+  "margin-left": 8,
+  // Choose the order of the modules
+  "modules-left": [
+    "hyprland/workspaces"
+  ],
+  "modules-center": [
+    "clock"
+  ],
+  "modules-right": [
+    "tray",
+    "cpu",
+    "memory",
+    "network",
+    "pulseaudio",
+    "custom/power"
+  ],
+  // Modules configuration
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "format-icons": {
+      "active": "\uf111",
+      "default": "\uf111"
+    },
+    "persistent-workspaces": {
+      "*": [
+        1,
+        2,
+        3
+      ]
+    },
+    "disable-scroll": true,
+    "all-outputs": true,
+    "tooltip": false
+  },
+  "tray": {
+    "spacing": 10,
+    "tooltip": false
+  },
+  "clock": {
+    "timezone": "Europe/Berlin",
+    "locale": "de_DE.UTF-8",
+    "format": "{:%H:%M - %a, %d %b %Y}",
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      //	"weeks-pos": "left", // disabled, since weeks are 1 behind...
+      "format": {
+        "months": "<span color='#ffead3'><b>{}</b></span>",
+        "days": "<span color='#ecc69d'><b>{}</b></span>",
+        "weeks": "<span color='#99ffdd'><b>KW{:%W}</b></span>",
+        "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+        "today": "<span color='#ff6699'><b><u>{}</u></b></span>"
+      }
+    },
+    "actions": {
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    }
+  },
+  "cpu": {
+    "format": "CPU {usage}%",
+    "interval": 2,
+    "states": {
+      "critical": 90
+    }
+  },
+  "memory": {
+    "format": "MEM {percentage}%",
+    "interval": 2,
+    "states": {
+      "critical": 80
+    }
+  },
+  "pulseaudio": {
+    "scroll-step": 5, // %, can be a float
+    "max-volume": 100,
+    "format": "VOL {volume}%",
+    "format-bluetooth": "{volume}% {icon} {format_source}",
+    "nospacing": 1,
+    "on-click": "pavucontrol",
+    "tooltip": false
+  },
+  "network": {
+    "format-wifi": "WIFI {bandwidthDownBits}",
+    "format-ethernet": "ETHN {bandwidthDownBits}",
+    "format-disconnected": "no network",
+    "interval": 5,
+    "tooltip": false
+  },
+  "custom/power": {
+    "format": "⏻ ",
+    "tooltip": false,
+    "menu": "on-click",
+    "menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
+    "menu-actions": {
+      "suspend": "systemctl suspend",
+      "hibernate": "systemctl hibernate",
+      "reboot": "reboot",
+      "shutdown": "shutdown now"
+    }
+  }
+}
