@@ -66,7 +66,6 @@ tooltip label {
   border: 2px solid #434a4c;
   color: #00eaff;
   border-radius: 10px;
-  margin: 6px 6px 6px 0px;
   padding: 2px 8px;
 }
 
@@ -74,14 +73,16 @@ tooltip label {
   background: alpha(#000000, 0.1);
   border: 2px solid #434a4c;
   border-radius: 10px;
-  margin: 6px 6px 6px 0px;
+  margin: 6px 3px 6px;
   padding: 2px 8px;
 }
 
+#keyboard-state,
 #cpu,
 #memory,
 #network,
-#pulseaudio {
+#pulseaudio,
+#custom-power {
   /* background: #ddc7a1; */
   /* border: 2px solid #c7ab7a; */
   /* color: #1d2021; */
@@ -89,8 +90,16 @@ tooltip label {
   border: 2px solid #434a4c;
   border-radius: 10px;
   color: #00eaff;
-  margin: 6px 6px 6px 0px;
+  margin: 6px 3px 6px;
   padding: 2px 8px;
+}
+
+#keyboard-state {
+  padding: 2px 15px;
+}
+
+#custom-power {
+  padding: 2px 0px 2px 10px;
 }
 
 #cpu.critical,
