@@ -19,11 +19,11 @@
   ],
   "modules-right": [
     "tray",
-    "keyboard-state",
     "cpu",
     "memory",
     "network",
     "pulseaudio",
+    "keyboard-state",
     "custom/power"
   ],
   // Modules configuration
@@ -52,11 +52,11 @@
     "numlock": true,
     "capslock": false,
     "format": {
-      "numlock": "\uf4f7 {icon}"
+      "numlock": "{icon}"
     },
     "format-icons": {
-      "locked": "\uf023",
-      "unlocked": "\uf2fc"
+      "locked": "\udb80\udfa0",
+      "unlocked": "\udb86\uddd3"
     }
   },
   "clock": {
