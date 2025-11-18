@@ -103,11 +103,12 @@
     "tooltip": false
   },
   "network": {
-    "format-wifi": "WIFI {bandwidthDownBits}",
-    "format-ethernet": "ETHN {bandwidthDownBits}",
+    "format-wifi": "WIFI {bandwidthDownBytes}",
+    "format-ethernet": "ETHN {bandwidthDownBytes}",
     "format-disconnected": "no network",
-    "interval": 5,
-    "tooltip": false
+    "tooltip-format-wifi": "{ifname}: {essid} ({signalStrength}%) - {ipaddr}/{cidr}",
+    "tooltip-format-ethernet": "{ifname}: {ipaddr}/{cidr} via {gwaddr}",
+    "interval": 5
   },
   "custom/power": {
     "format": "⏻ ",

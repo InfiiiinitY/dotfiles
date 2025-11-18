@@ -104,7 +104,8 @@ tooltip label {
 }
 
 #cpu.critical,
-#memory.critical {
+#memory.critical,
+#network.disconnected {
   /* background: alpha(#ddc7a1, 0.6); */
   /* border: 2px solid #c7ab7a; */
   border: 2px solid #c77a7a;
