@@ -1,0 +1,16 @@
+-- function M.setup_hyprexpo()
+--     if hl.plugin.hyprexpo ~= nil then
+--         hl.config({
+--             plugin = {
+--                 hyprexpo = {
+--                     columns = 3,
+--                     gap_size = 5,
+--                     skip_empty = true,
+--                     bg_col = "rgb(111111)",
+--                     workspace_method = "center current", -- [center/first] [workspace] e.g. first 1 or center m+1
+--                     gesture_distance = 300,          -- how far is the "max" for the gesture
+--                 }
+--             }
+--         })
+--     end
+-- end

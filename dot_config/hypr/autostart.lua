@@ -1,0 +1,17 @@
+-- Autostart necessary processes (like notifications daemons, status bars, etc.)
+-- Or execute your favorite apps at launch like this:
+
+hl.on("hyprland.start", function()
+	hl.exec_cmd("systemctl --user start hyprpolkitagent")
+	hl.exec_cmd("hyprpaper & dunst & hypridle")
+	hl.exec_cmd("qs -c noctalia-shell")
+	hl.exec_cmd("wl-clip-persist")
+	hl.exec_cmd("wl-paste --type text --watch cliphist store")
+	hl.exec_cmd("wl-paste --type image --watch cliphist store")
+	hl.exec_cmd("poweralertd")
+	hl.exec_cmd("hyprpm reload -n")
+	hl.exec_cmd("hyprctl setcursor breeze_cursors 24")
+	hl.exec_cmd("easyeffects --gapplication-service")
+	hl.exec_cmd("bash -c 'sleep 1 && /usr/local/bin/set_wallpaper.sh'")
+	hl.exec_cmd("bash -c 'sleep 1 && /usr/local/bin/openrgb-login.sh'")
+end)
