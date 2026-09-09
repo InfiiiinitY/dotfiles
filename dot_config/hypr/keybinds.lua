@@ -20,7 +20,7 @@ hl.bind(mainMod .. " + Q", hl.dsp.window.close()) -- Close the active window
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen()) -- Toggle active windows fullscreen
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.float()) -- Toggle active window floating
 hl.bind(mainMod .. " + SHIFT + P", hl.dsp.window.pin()) -- Pin the currently floating window
---hl.bind(mainMod .. " + " J, togglesplit -- Toggle split layout
+hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- Toggle split layout
 hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("hyprlock")) -- Lock screen on Win + L
 hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd("hyprshutdown -t 'Logging out...'")) -- Exit Hyprland which is basically like logging out
 hl.bind(mainMod .. " + CTRL + 1", hl.dsp.exec_cmd("hyprcap shot monitor:active -nw")) -- Screenshot active monitor and safe to file
