@@ -1,6 +1,6 @@
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
-local terminal = "ghostty"
+local terminal = "kitty"
 local fileManager = "dolphin"
 local browser = "zen-browser"
 local menu = "wofi -n"
