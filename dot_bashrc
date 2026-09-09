@@ -5,88 +5,146 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
+# Environment variables
+export MANPAGER='less'
+export PAGER='less'
+export TZ='Europe/Berlin'
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Support colors in less and color manpages
+export LESS_TERMCAP_mb=$'\e[1;31m'
+export LESS_TERMCAP_md=$'\e[1;31m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[1;33;44m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[4;1;32m'
+export LESS_TERMCAP_mr=$'\e[7m'
+export LESS_TERMCAP_mh=$'\e[2m'
+export LESS_TERMCAP_ZN=$'\e[74m'
+export LESS_TERMCAP_ZV=$'\e[75m'
+export LESS_TERMCAP_ZO=$'\e[73m'
+export LESS_TERMCAP_ZW=$'\e[75m'
+
 # don't put duplicate lines in the history. See bash(1) for more options
 # ... or force ignoredups and ignorespace
 HISTCONTROL=ignoredups:ignorespace
-
-# append to the history file, don't overwrite it
-shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=1000
 HISTFILESIZE=2000
 
+# append to the history file, don't overwrite it
+shopt -s histappend
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+# works only in Bash version >= 4
+# enable cd to folder by just typing the foldername
+# and autocorrection of folders when typing.
+# fall back to cdspell when needed
+shopt -s autocd 2>/dev/null || true
+shopt -s dirspell 2>/dev/null || true
+shopt -s cdspell
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
+################################
+##### Prompt customization #####
+################################
+## Store `tput` colors for future use to reduce fork+exec
+# the array will be 0-255 for colors, 256 will be sgr0 (reset)
+# and 257 will be bold
+COLOR256=()
+COLOR256[0]=$'\e[31m'
+COLOR256[256]=$'\e[0m'
+COLOR256[257]=$'\e[1m'
 
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color) color_prompt=yes;;
-esac
+# Colors for use in PS1 that may or may not change when
+# set_prompt_colors is run
+PROMPT_COLORS=()
 
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+# Change the prompt colors to a theme, themes are 0-29
+set_prompt_colors() {
+  local h=${1:-0}
+  local color=
+  local i=0
+  local j=0
+  for i in {22..231}; do
+    ((i % 30 == h)) || continue
 
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
+    color=${COLOR256[i]}
+
+    if [[ -z $color ]]; then
+      color=$'\e[38;5;'${i}m
+      COLOR256[i]=$color
     fi
-fi
 
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
+    PROMPT_COLORS[j]=$color
+    ((j++))
+  done
+}
 
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
+set_prompt_colors 27
 
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-fi
+#[(exit code)] <user> - <hostname> <uname> <cwd> [git branch] <$|#>
+
+# exit code of last process
+PS1='$(ret=$?;(($ret!=0)) && echo "\[${COLOR256[0]}\]($ret) \[${COLOR256[256]}\]")'
+
+# username (red for root)
+PS1+='\[${PROMPT_COLORS[0]}\]\[${COLOR256[257]}\]$(((UID==0)) && echo "\[${COLOR256[0]}\]")\u\[${COLOR256[256]}\]'
+
+# @
+PS1+='\[${PROMPT_COLORS[1]}\]\[${COLOR256[257]}\]@\[${COLOR256[256]}\]'
+
+# hostname
+PS1+='\[${PROMPT_COLORS[3]}\]\h '
+
+# cwd
+PS1+='\[${PROMPT_COLORS[5]}\]\w '
+
+# optional git branch
+PS1+='$(branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null); [[ -n $branch ]] && echo "\[${PROMPT_COLORS[2]}\](\[${PROMPT_COLORS[3]}\]git:$branch\[${PROMPT_COLORS[2]}\]) ")'
+
+# prompt character
+PS1+='\[${PROMPT_COLORS[0]}\]\$\[${COLOR256[256]}\] '
+
+# -----------------------------------------------------
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
 if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+  . ~/.bash_aliases
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-#if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-#    . /etc/bash_completion
-#fi
+#######################
+##### Funny stuff #####
+#######################
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+# print a rainbow if truecolor is available to the terminal
+truecolor-rainbow() {
+  local i r g b
+  for ((i = 0; i < 77; i++)); do
+    r=$((255 - (i * 255 / 76)))
+    g=$((i * 510 / 76))
+    b=$((i * 255 / 76))
+    ((g > 255)) && g=$((510 - g))
+    printf '\033[48;2;%d;%d;%dm ' "$r" "$g" "$b"
+  done
+  printf '\e[0m\n'
+}
+
+# -------------------------------------------------------
+
+# load completion
+. /etc/bash/bash_completion 2>/dev/null ||
+  . ~/.bash_completion 2>/dev/null
+
+. "$HOME/.local/bin/env"
